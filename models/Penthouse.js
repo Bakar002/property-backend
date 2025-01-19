@@ -27,6 +27,10 @@ const PenthouseSchema = new mongoose.Schema({
     images: [{ type: String, required: true }], // URLs of high-resolution images
     listedDate: { type: Date, default: Date.now }, // Date of listing
     isAvailable: { type: Boolean, default: true }, // Availability status
+    views: { type: Number, default: 0 }, // Number of views
+    followers: { type: Number, default: 0 }, // Number of followers
+    isFeatured: { type: Boolean, default: true }, // Featured status
+    isFollowed: { type: Boolean, default: false }, // Followed status
 });
 
 module.exports = mongoose.model('Penthouse', PenthouseSchema);

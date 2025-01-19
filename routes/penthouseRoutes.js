@@ -4,6 +4,9 @@ const penthouseController = require('../controllers/penthouseController');
 
 router.get('/filter', penthouseController.filterPenthouses);
 
+// Route to delete all penthouses
+router.delete('/delete-all', penthouseController.deleteAllPenthouses);
+
 // Create a new Penthouse
 router.post('/', penthouseController.createPenthouse);
 

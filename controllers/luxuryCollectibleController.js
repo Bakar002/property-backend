@@ -54,6 +54,19 @@ exports.deleteLuxuryCollectibleById = async (req, res) => {
     }
 };
 
+// Delete All LuxuryCollectibles
+exports.deleteAllLuxuryCollectibles = async (req, res) => {
+    try {
+        const result = await LuxuryCollectible.deleteMany({});
+        res.status(200).json({
+            message: 'All luxury collectibles have been deleted successfully',
+            deletedCount: result.deletedCount,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Filter LuxuryCollectibles
 exports.filterLuxuryCollectibles = async (req, res) => {
     try {

@@ -28,6 +28,12 @@ const MansionSchema = new mongoose.Schema({
     images: [{ type: String, required: true }], // URLs of high-resolution images
     listedDate: { type: Date, default: Date.now }, // Date of listing
     isAvailable: { type: Boolean, default: true }, // Availability status
+    // Newly Added Fields
+    status: { type: String, default: 'Available' }, // Listing status
+    views: { type: Number, default: 0 }, // Number of views
+    followers: { type: Number, default: 0 }, // Number of followers
+    isFeatured: { type: Boolean, default: false }, // Featured status
+    isFollowed: { type: Boolean, default: false }, // Followed by the user
 });
 
 module.exports = mongoose.model('Mansion', MansionSchema);

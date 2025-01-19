@@ -54,6 +54,19 @@ exports.deleteMansionById = async (req, res) => {
     }
 };
 
+// Delete All Mansions
+exports.deleteAllMansions = async (req, res) => {
+    try {
+        const result = await Mansion.deleteMany({});
+        res.status(200).json({
+            message: 'All mansions have been deleted successfully',
+            deletedCount: result.deletedCount,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Filter Mansions
 exports.filterMansions = async (req, res) => {
     try {
@@ -67,62 +80,76 @@ exports.filterMansions = async (req, res) => {
             country,
             latitude,
             longitude,
-            radius, // In kilometers, for map-based filtering
-            propertyType, // Filter by property type
-            schools, // Filter by nearby schools
-            parks, // Filter by nearby parks
-            transportation, // Filter by nearby transport options
-            attractions // Filter by nearby attractions
+            radius, // For map-based filtering
+            propertyType, // Property type
+            schools, // Nearby schools
+            parks, // Nearby parks
+            transportation, // Nearby transport options
+            attractions, // Nearby attractions
+            amenities, // List of amenities
+            isFeatured, // Whether the property is featured
+            isAvailable, // Availability status
+            status, 
         } = req.query;
 
-        console.log("query 🙄🙄", req.query);
-
-        // Build query object dynamically
+        // Build query object
         const query = {};
 
-        // Filter by price range
+        // Price range
         if (priceMin || priceMax) {
             query.price = {};
             if (priceMin) query.price.$gte = Number(priceMin);
             if (priceMax) query.price.$lte = Number(priceMax);
         }
 
-        // Filter by number of bedrooms and bathrooms
+        // Bedrooms and bathrooms
         if (bedrooms) query.bedrooms = { $gte: Number(bedrooms) };
         if (bathrooms) query.bathrooms = { $gte: Number(bathrooms) };
 
-        // Filter by location
+        // Location
         if (city) query['location.city'] = city;
         if (state) query['location.state'] = state;
         if (country) query['location.country'] = country;
 
-        // Filter by property type
-        if (propertyType) query.propertyType = propertyType;
-
-        // Filter by proximity to a location (latitude, longitude)
+        // Geo-based filtering
         if (latitude && longitude && radius) {
-            const RADIUS_IN_METERS = Number(radius) * 1000; // Convert km to meters
+            const RADIUS_IN_METERS = Number(radius) * 1000;
             query['location.coordinates'] = {
                 $geoWithin: {
                     $centerSphere: [
                         [Number(longitude), Number(latitude)],
-                        RADIUS_IN_METERS / 6378100 // Convert radius to radians
-                    ]
-                }
+                        RADIUS_IN_METERS / 6378100,
+                    ],
+                },
             };
         }
 
-        // Filter by neighborhood details (e.g., schools, parks, transportation, attractions)
-        if (schools) query['neighborhoodDetails.schools'] = { $in: [schools] };
-        if (parks) query['neighborhoodDetails.parks'] = { $in: [parks] };
-        if (transportation) query['neighborhoodDetails.transportation'] = { $in: [transportation] };
-        if (attractions) query['neighborhoodDetails.attractions'] = { $in: [attractions] };
+        // Property type
+        if (propertyType) query.propertyType = propertyType;
 
-        // Execute query
+        // Neighborhood details
+        if (schools) query['neighborhoodDetails.schools'] = { $in: schools.split(',') };
+        if (parks) query['neighborhoodDetails.parks'] = { $in: parks.split(',') };
+        if (transportation)
+            query['neighborhoodDetails.transportation'] = { $in: transportation.split(',') };
+        if (attractions) query['neighborhoodDetails.attractions'] = { $in: attractions.split(',') };
+
+        // Amenities (match any of the provided amenities)
+        if (amenities) query.amenities = { $in: amenities.split(',') };
+
+        // Status and availability
+        if (status) query.status = status;
+        if (isAvailable !== undefined) query.isAvailable = isAvailable === 'true';
+
+        // Featured filter
+        if (isFeatured !== undefined) query.isFeatured = isFeatured === 'true';
+
+        // Execute the query
         const mansions = await Mansion.find(query);
         res.status(200).json(mansions);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
 

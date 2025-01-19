@@ -5,6 +5,9 @@ const luxuryCollectibleController = require('../controllers/luxuryCollectibleCon
 // Filter LuxuryCollectibles
 router.get('/filter', luxuryCollectibleController.filterLuxuryCollectibles);
 
+// Route to delete all luxury collectibles
+router.delete('/delete-all', luxuryCollectibleController.deleteAllLuxuryCollectibles);
+
 // Create a new LuxuryCollectible
 router.post('/', luxuryCollectibleController.createLuxuryCollectible);
 

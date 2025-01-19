@@ -54,6 +54,19 @@ exports.deletePenthouseById = async (req, res) => {
     }
 };
 
+// Delete All Penthouses
+exports.deleteAllPenthouses = async (req, res) => {
+    try {
+        const result = await Penthouse.deleteMany({});
+        res.status(200).json({
+            message: 'All penthouses have been deleted successfully',
+            deletedCount: result.deletedCount,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 exports.filterPenthouses = async (req, res) => {
     try {
         const {

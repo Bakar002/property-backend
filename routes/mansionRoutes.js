@@ -4,6 +4,9 @@ const mansionController = require('../controllers/mansionController');
 
 router.get('/filter', mansionController.filterMansions);
 
+// Route to delete all mansions
+router.delete('/delete-all', mansionController.deleteAllMansions);
+
 // Create a new Mansion
 router.post('/', mansionController.createMansion);
 
