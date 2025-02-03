@@ -15,6 +15,8 @@ exports.createMansion = async (req, res) => {
 exports.getAllMansions = async (req, res) => {
     try {
         const mansions = await Mansion.find();
+        console.log("Mansion found 🙄🙄" , mansions);
+        
         res.status(200).json(mansions);
     } catch (error) {
         res.status(500).json({ error: error.message });
