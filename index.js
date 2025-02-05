@@ -10,8 +10,15 @@ const luxuryCollectibleRoutes = require('./routes/luxuryCollectibleRoutes');
 const userRoutes = require('./routes/userRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
 
+// Set CORS options
+const corsOptions = {
+    origin: 'https://propertyfront.vercel.app/', // Replace with the domain of the site you want to allow
+    methods: ['GET', 'POST'], // Optional: specify allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Optional: specify allowed headers
+};
+
 connectDB();
-app.use(cors());
+app.use(cors(corsOptions)); // Use CORS with the specified options
 app.use(express.json()); 
 
 app.get('/', (req, res) => {
