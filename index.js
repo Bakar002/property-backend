@@ -12,7 +12,7 @@ const propertyRoutes = require('./routes/propertyRoutes');
 
 // Set CORS options
 const corsOptions = {
-    origin: 'https://propertyfront.vercel.app', // Replace with the domain of the site you want to allow
+    origin: 'https://curious-cat-68add3.netlify.app', // Replace with the domain of the site you want to allow
     methods: ['GET', 'POST'], // Optional: specify allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'] // Optional: specify allowed headers
 };
